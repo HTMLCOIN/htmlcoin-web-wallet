@@ -42,7 +42,7 @@ export default {
       parse: 'Parse',
       file: 'File',
       password_is_not_same_as_the_old_one: 'Password is not same as the old one',
-      mnemonics_are_not_same_as_the_words_should_remember: 'The mnemoincs are not same as the words you should remember',
+      mnemonics_are_not_same_as_the_words_should_remember: 'The mnemonics are not same as the words you should remember',
       mnemonics_can_not_restore: 'Those mnemonics can not restore a wallet, please check and try again',
       address_is_not_same_as_the_old_one: 'This address is not same as the old one',
       from_address_is_not_same_as_the_wallet: 'The from address is not same as the wallet address',
@@ -69,7 +69,7 @@ export default {
     upload: 'Upload',
   },
   file_creator: {
-    download: 'Please click this button to start downloading your backup. If the download does not start, you can right-click this button and choose "save link as ..."',
+    download: 'Please click this button to start downloading your backup. You can also right-click and "save link as ..."',
   },
   ledger: {
     comm_fail: 'Fail to connect Ledger. Please re-plugin your ledger and try again',
@@ -91,7 +91,7 @@ export default {
     to_address: 'To Address',
     amount: 'Amount',
     fee: 'Fee',
-    info: 'You need two computers(one online and one offline) and a removeable storage device to finish a safe-send. If you follow the tips below, you will not risk leaking your private key. For the offline computer, please in "Settings"-"Mode" choose "offline", and then restore your wallet.',
+    info: 'You need two computers (one online and one offline) and a removeable storage device to finish a safe-send. If you follow the tips below, you will not risk leaking your private key. For the offline computer, please in "Settings"-"Mode" choose "offline", and then restore your wallet.',
     info1_online: 'Please finish the form, then save the file and copy to the offline computer. And the finish step 2 on the offline computer',
     info1_offline: 'Please finish step 1 on the online computer and copy the file from online computer and then go to step 2',
     info2_online: 'Please finish this step on offline computer, and copy the file from offline computer and then go to step 3',
@@ -166,7 +166,7 @@ export default {
   dump_as_key_file: {
     title: 'Dump as a key file',
     password_title: 'Please input a password to encrypt your wallet',
-    warning: 'Please remember this password, if you lose this password, this backup file cannot be decrypted any more',
+    warning: 'Please remember this password. If you lose it, this backup file cannot be decrypted anymore.',
   },
   config: {
     title: 'Settings',
