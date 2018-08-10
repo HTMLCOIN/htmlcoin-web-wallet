@@ -42,7 +42,7 @@ export default {
       parse: 'Parse',
       file: 'File',
       password_is_not_same_as_the_old_one: 'Password is not same as the old one',
-      mnemonics_are_not_same_as_the_words_should_remember: 'The mnemonics are not same as the words you should remember',
+      mnemonics_are_not_same_as_the_words_should_remember: 'The mnemonincs are not same as the words you should remember',
       mnemonics_can_not_restore: 'Those mnemonics can not restore a wallet, please check and try again',
       address_is_not_same_as_the_old_one: 'This address is not same as the old one',
       from_address_is_not_same_as_the_wallet: 'The from address is not same as the wallet address',
@@ -69,7 +69,7 @@ export default {
     upload: 'Upload',
   },
   file_creator: {
-    download: 'Please click this button to start downloading your backup. You can also right-click and "save link as ..."',
+    download: 'Please click this button to start downloading your backup. You can also right-click and choose "save link as ..."',
   },
   ledger: {
     comm_fail: 'Fail to connect Ledger. Please re-plugin your ledger and try again',
@@ -166,7 +166,7 @@ export default {
   dump_as_key_file: {
     title: 'Dump as a key file',
     password_title: 'Please input a password to encrypt your wallet',
-    warning: 'Please remember this password. If you lose it, this backup file cannot be decrypted anymore.',
+    warning: 'Please remember this password. If you lose it, this backup file cannot be decrypted anymore',
   },
   config: {
     title: 'Settings',
