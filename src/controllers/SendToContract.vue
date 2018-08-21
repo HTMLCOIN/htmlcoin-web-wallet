@@ -142,7 +142,7 @@ export default {
     },
     async send() {
       try {
-        const encodedData = abi.encodeMethod(this.parsedAbi[this.method].info, this.inputParams).substr(2)
+	const encodedData = abi.encodeMethod(this.parsedAbi[this.method].info, this.inputParams).substr(2)
         this.confirmSendDialog = true
         try {
           this.rawTx = await webWallet.getWallet().generateSendToContractTx(this.contractAddress, encodedData, this.gasLimit, this.gasPrice, this.fee)
@@ -155,6 +155,7 @@ export default {
         this.canSend = true
       } catch (e) {
         this.$root.error('Params error')
+	alert(e.message || e)
         this.$root.log.error('send_to_contract_encode_abi_error', e.stack || e.toString() || e)
         this.confirmSendDialog = false
         return false

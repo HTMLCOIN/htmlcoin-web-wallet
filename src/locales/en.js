@@ -109,6 +109,14 @@ export default {
   request_payment: {
     title: 'Request Payment',
   },
+  create_token: {
+    title: 'Create Token',
+    name: 'Token Name',
+    symbol: 'Token Symbol',
+    decimal: 'Decimals (It\'s recommended to set decimals to 8)',
+    total_supply: 'Total Supply (UNIT: 1 Token)',
+    confirm: 'Do you confirm the creation of this Token?',
+  },
   create_contract: {
     title: 'Create Contract',
     confirm: 'Do you confirm to publish this contract?',

@@ -1,22 +1,51 @@
 <template>
   <v-app light>
-    <v-navigation-drawer permanent clipped app>
-      <v-list class="grey lighten-3">
-        <template v-for="(item, i) in menu">
-          <v-divider dark v-if="item.divider" class="my-4" :key="i" v-show="!notShow[item.name]"></v-divider>
-          <v-list-tile :key="i" v-else @click="changeView(item.name)" active-class="white" v-model="isCurrent[item.name]" v-show="!notShow[item.name]">
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title class="black--text">
-                {{ $t('common.menu.' + item.name) }}
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-      </v-list>
-    </v-navigation-drawer>
+  <v-navigation-drawer permanent clipped app>
+    <template permanent>
+      <v-layout row>
+        <v-flex>
+          <v-card>
+            <v-list>
+              <v-list-group
+               v-for="item in items"
+               v-model="item.active"
+
+               v-show="!notShow[item.name]"
+
+               :key="item.title"
+               :prepend-icon="item.action"
+               no-action
+              >
+                <v-list-tile slot="activator" v-show="!notShow[item.name]">
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile
+                 v-for="subItem in item.items"
+
+                 v-show="!notShow[subItem.name]"
+
+                 :key="subItem.title"
+                 @click="changeView(subItem.name)"
+                >
+                  <v-list-tile-content>
+                    <v-list-tile-title class="body-2" v-if="!item.dapps">{{ subItem.title }}</v-list-tile-title>
+                    <v-list-tile-title class="body-2" v-else><img :src="subItem.image"></v-list-tile-title>
+                  </v-list-tile-content>
+
+                  <v-list-tile-action v-if="!item.dapps">
+                    <v-icon>{{ subItem.action }}</v-icon>
+                  </v-list-tile-action>
+                </v-list-tile>
+              </v-list-group>
+            </v-list>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </template>
+  </v-navigation-drawer>
     <v-toolbar :class="headerClass" app fixed clipped-left>
       <span class="title">
         <span class="text"><img src="https://wallet.htmlcoin.com/images/webwallet.png" alt="Htmlcoin Logo"  style="float:left;height:45px;">
@@ -44,6 +73,8 @@
               <create-contract v-if="isCurrent['create_contract']"></create-contract>
               <send-to-contract v-if="isCurrent['send_to_contract']"></send-to-contract>
               <call-contract v-if="isCurrent['call_contract']"></call-contract>
+              <create-token v-if="isCurrent['create_token']"></create-token>
+              <dapp-myoffspring v-if="isCurrent['dapp_myoffspring']"></dapp-myoffspring>
               <config v-if="isCurrent['settings']"></config>
             </v-flex>
           </v-layout>
@@ -74,6 +105,8 @@ import SafeSend from 'controllers/SafeSend'
 import Send from 'controllers/Send'
 import RequestPayment from 'controllers/RequestPayment'
 import DumpKeyFile from 'controllers/DumpKeyFile'
+import CreateToken from 'controllers/CreateToken'
+import DappMyOffspring from 'controllers/Dapp-MyOffspring'
 import CreateContract from 'controllers/CreateContract'
 import SendToContract from 'controllers/SendToContract.vue'
 import CallContract from 'controllers/CallContract.vue'
@@ -84,6 +117,7 @@ import i18n from 'libs/i18n'
 const log = createLog({
   maxLogSizeInBytes: 500 * 1024 // 500KB
 })
+
 export default {
   name: 'app',
   i18n,
@@ -94,29 +128,145 @@ export default {
       network: config.getNetwork(),
       mode: config.getMode(),
       log: log,
-      menu: [
-        { icon: 'add', name: 'create' },
-        { icon: 'assignment', name: 'create_from_mnemonic' },
-        { icon: 'sms', name: 'restore_from_mnemonic' },
-        { icon: 'create', name: 'restore_from_wif' },
-        { icon: 'phonelink_lock', name: 'restore_from_mobile' },
-        { icon: 'cloud_upload', name: 'restore_from_key_file' },
-        { icon: 'flip_to_front', name: 'restore_from_ledger' },
-        { divider: true, name: 'wallet' },
-        { icon: 'account_balance_wallet', name: 'view' },
-        { icon: 'list', name: 'transactions' },
-        { icon: 'security', name: 'safe_send' },
-        { icon: 'repeat', name: 'send' },
-        { icon: 'undo', name: 'request_payment' },
-        { icon: 'cloud_download', name: 'dump_as_key_file' },
-        { divider: true, name: 'contract' },
-        { icon: 'gavel', name: 'create_contract' },
-        { icon: 'publish', name: 'send_to_contract' },
-        { icon: 'play_circle_filled', name: 'call_contract' },
-        { divider: true, name: 'disc' },
-        { icon: 'settings', name: 'settings' },
-      ],
-      notifyList: {}
+      notifyList: {},
+      items: [
+        {
+          action: 'input',
+          title: 'Add Wallet',
+          name: 'new_wallet',
+	  active: true,
+          items: [
+            { 
+              title: 'Generate New Wallet',
+              name: 'create',
+              action: 'add'
+            },
+            {
+              title: 'Create from Mnemonic',
+              name: 'create_from_mnemonic',
+              action: 'assignment'
+            },
+            {
+              title: 'Restore from Mnemonic',
+              name: 'restore_from_mnemonic',
+              action: 'sms'
+            },
+            {
+              title: 'Restore from Key File',
+              name: 'restore_from_key_file',
+              action: 'cloud_upload'
+            },
+            {
+              title: 'Restore from WIF',
+              name: 'restore_from_wif',
+              action: 'create'
+            },
+            {
+              title: 'Restore from Mobile',
+              name: 'restore_from_mobile',
+              action: 'phonelink_lock'
+            },
+            {
+              title: 'Restore from Ledger',
+              name: 'restore_from_ledger',
+              action: 'flip_to_front'
+            }
+          ]
+        },
+        {
+          action: 'account_balance_wallet',
+          title: 'Wallet Functions',
+          name: 'wallet',
+          active: false,
+          items: [
+            {
+              title: 'View Wallet Info',
+              name: 'view',
+              action: 'info'
+            },            
+            {
+              title: 'View Wallet Txs',
+              name: 'transactions',
+              action: 'list'
+            },
+            {
+              title: 'Send',
+              name: 'send',
+              action: 'redo'
+            },
+            {
+              title: 'Safe Send',
+              name: 'safe_send',
+              action: 'security'
+            },
+            {
+              title: 'Request Payment',
+              name: 'request_payment',
+              action: 'undo'
+            },
+            {
+              title: 'Dump as Key File',
+              name: 'dump_as_key_file',
+              action: 'cloud_download'
+            }
+          ]
+        },
+        {
+          action: 'code',
+          title: 'Smart Contracts',
+          name: 'contract',
+          active: false,
+          items: [
+            {
+              title: 'Create Contract',
+              name: 'create_contract',
+              action: 'build'
+            },
+            {
+              title: 'Send to Contract',
+              name: 'send_to_contract',
+              action: 'play_circle_outline'
+            },
+            {
+              title: 'Call Contract',
+              name: 'call_contract',
+              action: 'pageview'
+            }
+          ]
+        },
+        {
+          dapps: true,
+          action: 'apps',
+          title: 'DApps',
+          name: 'dapps',
+          active: false,
+          items: [
+            {
+              title: 'TokenFarm',
+              name: 'create_token',
+              image: 'http://104.236.228.131/tokenfarm/dist/images/tokenfarm_logo_menu.png'
+            },
+            {
+              title: 'myOffspring',
+              name: 'dapp_myoffspring',
+              image: 'http://104.236.228.131/tokenfarm/dist/images/myoffspring_logo_menu.png'
+            }
+          ]
+        },
+        {
+          action: 'power_settings_new',
+          title: 'Settings',
+          name: 'top_settings',
+          active: false,
+          items: [
+            {
+              title: 'General',
+              name: 'settings',
+              action: 'settings'
+            }
+          ]
+        }
+      ]
     }
   },
   computed: {
@@ -133,10 +283,13 @@ export default {
         send: this.mode === 'offline' || !this.wallet,
         request_payment: !this.wallet,
         dump_as_key_file: !this.wallet || !this.wallet.getHasPrivKey(),
+        create_token: this.mode === 'offline' || !this.wallet,
         contract: this.mode === 'offline' || !this.wallet,
         create_contract: this.mode === 'offline' || !this.wallet,
         send_to_contract: this.mode === 'offline' || !this.wallet,
         call_contract: this.mode === 'offline' || !this.wallet,
+	my_offspring: this.mode === 'offline' || !this.wallet,
+        dapps: this.mode === 'offline' || !this.wallet,
       }
     },
     headerClass() {
@@ -159,6 +312,8 @@ export default {
     Send,
     RequestPayment,
     DumpKeyFile,
+    CreateToken,
+    DappMyOffspring,
     CreateContract,
     SendToContract,
     CallContract,
@@ -180,13 +335,13 @@ export default {
     changeView(name) {
       this.current = name
     },
-    error(msg) {
-      this.addNotify(msg, 'error')
+    error(msg, isHtml = false, ttl = 10) {
+      this.addNotify(msg, 'error', isHtml, ttl)
     },
-    success(msg) {
-      this.addNotify(msg, 'success')
+    success(msg, isHtml = false, ttl = 10) {
+      this.addNotify(msg, 'success', isHtml, ttl)
     },
-    addNotify(msg, type) {
+    addNotify(msg, type, isHtml = false, ttl = 10) {
       const notifyId = [msg, type].join('_')
       const notify = {
         msg: msg.split(' ').reduce((msg, current) => {
@@ -194,13 +349,19 @@ export default {
           tmsg = (tmsg === 'common.notify.' + current) ? ' ' + current : tmsg
           return msg + tmsg
         }, ''),
-        type
+        type,
+        show: true,
+        isHtml,
       }
-      if (this.notifyList[notifyId]) {
+      if (this.notifyList[notifyId] && this.notifyList[notifyId].timer) {
         clearTimeout(this.notifyList[notifyId].timer)
       }
       Vue.set(this.notifyList, notifyId, notify)
-      this.notifyList[notifyId].timer = setTimeout(() => {Vue.delete(this.notifyList, notifyId)}, 10000)
+      if (ttl > 0) {
+        this.notifyList[notifyId].timer = setTimeout(() => {
+          Vue.delete(this.notifyList, notifyId)
+        }, ttl * 1000)
+      }
     }
   }
 }
