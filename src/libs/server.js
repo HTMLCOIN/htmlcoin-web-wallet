@@ -1,7 +1,10 @@
 import insight from 'libs/nodes/insight'
+import htmlcoinInfo from 'libs/nodes/htmlcoinInfo'
 
 let nodeConfigs = {
-  insight: insight
+  insight,
+  htmlcoinInfo
+  
 }
 
 const defaultNodeId = 'insight'
