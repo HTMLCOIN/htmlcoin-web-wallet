@@ -63,7 +63,7 @@
               <restore-wif @restored="setWallet" v-show="isCurrent['restore_from_wif']"></restore-wif>
               <restore-mobile @restored="setWallet" v-show="isCurrent['restore_from_mobile']"></restore-mobile>
               <restore-key-file @restored="setWallet" v-show="isCurrent['restore_from_key_file']"></restore-key-file>
-              <restore-ledger @restored="setWallet"  v-if="isCurrent['restore_from_ledger']"></restore-ledger>
+              <restore-ledger @restored="setWallet" v-if="isCurrent['restore_from_ledger']"></restore-ledger>
               <view-wallet :view="isCurrent['view']" v-if="isCurrent['view']"></view-wallet>
               <view-tx :view="isCurrent['transactions']" v-if="isCurrent['transactions']"></view-tx>
               <safe-send @send="setWallet" v-if="isCurrent['safe_send']"></safe-send>
