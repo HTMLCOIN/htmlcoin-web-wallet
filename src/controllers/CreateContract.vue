@@ -108,7 +108,7 @@ export default {
         const txId = wallet.sendRawTx(this.rawTx)
         this.confirmSendDialog = false
         this.sending = false
-	const txViewUrl = server.currentNode().getTxExplorerUrl(txId)
+	      const txViewUrl = server.currentNode().getTxExplorerUrl(txId)
         this.$root.success(`Successful sent! You can view it at <a href="${txViewUrl}" target="_blank">${txViewUrl}</a>`, true, 0)
         this.$emit('send')
       } catch (e) {
