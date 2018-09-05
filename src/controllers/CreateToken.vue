@@ -123,7 +123,7 @@ export default {
       const nameCheck = /^(?!\s*$).+/.test(this.name)
       const symbolCheck = /^\b[a-zA-Z0-9_]+\b$/.test(this.symbol)
       const decimalCheck = /^(0|[1-9][0-9]*)$/.test(this.decimal) && this.decimal < 256
-      const totalSupplyCheck = /^\d*$/.test(this.totalSupply) && this.totalSupply > 0
+      const totalSupplyCheck = !isNaN(this.totalSupply)
       const gasPriceCheck = /^\d+\.?\d*$/.test(this.gasPrice) && this.gasPrice > 0
       const gasLimitCheck = /^\d+\.?\d*$/.test(this.gasLimit) && this.gasLimit > 0
       const feeCheck = /^\d+\.?\d*$/.test(this.fee) && this.fee > 0.0001
