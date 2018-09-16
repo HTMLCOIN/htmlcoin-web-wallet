@@ -10,7 +10,7 @@ switch (config.getNetwork()) {
     break
   case 'mainnet':
     domain = 'https://info.htmlcoin.com'
-    insightDomain = 'https://explorer.qtum.org'
+    insightDomain = 'https://explorer.htmlcoin.com'
     break
 }
 const apiPrefix = insightDomain + '/api'
