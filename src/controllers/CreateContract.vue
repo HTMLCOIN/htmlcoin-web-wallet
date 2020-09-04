@@ -10,8 +10,9 @@
           v-model.trim="code"
           multiLine
           required
-          ></v-text-field>
-        <a href="https://remix.ethereum.org" target="_blank" style="float: right;">{{ $t('create_contract.compiler') }}</a>
+        ></v-text-field>
+        <a href="https://ethereum.github.io/browser-solidity/" target="_blank"
+           style="float: right;">{{ $t('create_contract.compiler') }}</a>
         <v-text-field
           label="Gas Price (1e-8 HTML/gas)"
           v-model.trim="gasPrice"
@@ -26,7 +27,7 @@
           label="Fee"
           v-model.trim="fee"
           required
-          ></v-text-field>
+         ></v-text-field>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -51,8 +52,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="blue--text darken-1" flat @click="confirmSend" v-show="canSend && !sending">{{ $t('common.confirm') }}</v-btn>
-          <v-btn class="red--text darken-1" flat @click.native="confirmSendDialog = false" :v-show="!sending">{{ $t('common.cancel') }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click="confirmSend" v-show="canSend && !sending">
+            {{ $t('common.confirm') }}
+          </v-btn>
+          <v-btn class="red--text darken-1" flat @click.native="confirmSendDialog = false" :v-show="!sending">
+            {{ $t('common.cancel') }}
+          </v-btn>
           <v-progress-circular indeterminate :size="50" v-show="sending" class="primary--text"></v-progress-circular>
         </v-card-actions>
       </v-card>
@@ -61,9 +66,8 @@
 </template>
 
 <script>
-import webWallet from 'libs/web-wallet'
-import server from 'libs/server'
-
+ import webWallet from 'libs/web-wallet'
+ import server from 'libs/server'
 export default {
   data () {
     return {
@@ -100,16 +104,15 @@ export default {
         return false
       }
     },
-
-   async confirmSend() {
+    async confirmSend() {
       const wallet = webWallet.getWallet()
       this.sending = true
       try {
         const txId = await wallet.sendRawTx(this.rawTx)
         this.confirmSendDialog = false
         this.sending = false
-        const txViewUrl = server.currentNode().getTxExplorerUrl(txId)
-        this.$root.success(`Successful send. You can view at <a href="${txViewUrl}" target="_blank">${txViewUrl}</a>`, true, 0)
+	const txViewUrl = server.currentNode().getTxExplorerUrl(txId)
+        this.$root.success(`Successful sent! You can view it at <a href="${txViewUrl}" target="_blank">${txViewUrl}</a>`, true, 0)
         this.$emit('send')
       } catch (e) {
         alert(e.message || e)

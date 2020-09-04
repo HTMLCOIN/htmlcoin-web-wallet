@@ -18,14 +18,13 @@ export default {
   },
 
   addCustomToken(address, name, symbol, decimals) {
-    const tokenList = loadTokenList(config.getNetwork())
-    const has = tokenList.find(item => {
-      return address === item.address
-    })
-    if (has) return true
     const network = config.getNetwork()
+    if (tokens[network].find(item => address === item.address)) {
+      return true
+    }
     const savedTokenList = config.get(`tokenList_${network}`, [])
-    savedTokenList[savedTokenList.length] = {
+    const index = savedTokenList.findIndex(item => address === item.address)
+    savedTokenList[index === -1 ? savedTokenList.length : index] = {
       name,
       symbol,
       address,

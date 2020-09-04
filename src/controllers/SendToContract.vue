@@ -22,6 +22,7 @@
           :items="parsedAbi"
           label="Method"
           v-model="method"
+          @change="amount"
           single-line
           bottom
         ></v-select>
@@ -31,6 +32,14 @@
             :label="param.name"
             :key="index"
             v-model="inputParams[index]"
+          ></v-text-field>
+        </template>
+        <template v-if="payable">
+          <v-text-field
+            label="amount"
+            v-model="amount"
+            outline
+            background-color="blue lighten-1"
           ></v-text-field>
         </template>
         <v-text-field
@@ -97,6 +106,7 @@ export default {
       gasPrice: '40',
       gasLimit: '2500000',
       fee: '0.01',
+      amount: 0,
       confirmSendDialog: false,
       rawTx: 'loading...',
       canSend: false,
@@ -113,6 +123,13 @@ export default {
         return inputs
       }
       return null
+    },
+    payable: function() {
+      if (this.method === null) {
+        return null
+      } else {
+        return this.parsedAbi[this.method].info.payable
+      }
     },
     notValid: function() {
       //@todo valid the address
@@ -133,7 +150,8 @@ export default {
         const abiJson = JSON.parse(this.abi)
         this.parsedAbi = []
         for (let i = 0; i < abiJson.length; i++) {
-          this.parsedAbi[i] = {text: abiJson[i]['name'], value: i, info: abiJson[i]}
+          if (abiJson[i].type === 'constructor' || abiJson[i].type === 'event') continue
+          this.parsedAbi.push({text: abiJson[i]['name'], value: i, info: abiJson[i]})
         }
       } catch (e) {
         this.$root.log.error('send_to_contract_decode_abi_error', e.stack || e.toString() || e)
@@ -142,10 +160,10 @@ export default {
     },
     async send() {
       try {
-        const encodedData = abi.encodeMethod(this.parsedAbi[this.method].info, this.inputParams).substr(2)
-        this.confirmSendDialog = true
+         const encodedData = abi.encodeMethod(this.parsedAbi[this.method].info, this.inputParams).substr(2)
+         this.confirmSendDialog = true
         try {
-          this.rawTx = await webWallet.getWallet().generateSendToContractTx(this.contractAddress, encodedData, this.gasLimit, this.gasPrice, this.fee)
+          this.rawTx = await webWallet.getWallet().generateSendToContractTx(this.contractAddress, encodedData, this.gasLimit, this.gasPrice, this.fee, this.amount)
         } catch (e) {
           this.$root.log.error('send_to_generate_tx_error', e.stack || e.toString() || e)
           alert(e.message || e)

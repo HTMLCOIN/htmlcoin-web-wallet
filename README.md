@@ -1,15 +1,10 @@
 # Htmlcoin Web Wallet
 
-'sudo git clone' into www folder 
-
-'sudo npm install'
-
-'sudo npm run build'
-
-'cd dist'
-
-'sudo nano index.html' update paths
-
+'nvm use 10'
+'git clone'
+'npm install'
+'npm run build'
+'cp -r dist/* /var/www/html'
 
 Features: 
 - Generate New Wallet

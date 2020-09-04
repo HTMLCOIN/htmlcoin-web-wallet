@@ -2,6 +2,14 @@
   <v-card>
     <v-card-title>
       <span class="headline">{{ $t('view_tx.title') }}</span>
+      <v-tooltip bottom>
+        <v-btn icon slot="activator" @click="refreshWallet">
+          <v-icon color="blue accent-4">
+            refresh
+          </v-icon>
+        </v-btn>
+        <span>Refresh</span>
+      </v-tooltip>
     </v-card-title>
     <v-card-text>
       <p>{{ $t('view_tx.recent') }}</p>
@@ -101,6 +109,11 @@ export default {
     txList: function() {
       return this.wallet.txList
     },
+  },
+  methods: {
+    async refreshWallet(){
+      this.wallet.setTxList()
+    }
   }
 }
 </script>

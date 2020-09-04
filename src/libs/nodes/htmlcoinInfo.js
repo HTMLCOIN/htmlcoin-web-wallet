@@ -13,7 +13,7 @@ switch (config.getNetwork()) {
     insightDomain = 'https://explorer.htmlcoin.com'
     break
 }
-const apiPrefix = insightDomain + '/api'
+const apiPrefix = insightDomain + ''
 const _get = async url => {
   return (await axios.get(apiPrefix + url)).data
 }

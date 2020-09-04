@@ -2,6 +2,14 @@
   <v-card>
     <v-card-title>
       <span class="headline">{{ $t('view.title') }}</span>
+      <v-tooltip bottom>
+        <v-btn icon slot="activator" @click="refreshWallet">
+          <v-icon color="blue accent-4">
+            refresh
+          </v-icon>
+        </v-btn>
+        <span>Refresh</span>
+      </v-tooltip>
     </v-card-title>
     <v-card-text>
       <v-layout v-for="(item, i) in infoLabel" :key="i">
@@ -46,11 +54,11 @@
       <v-layout v-if="wallet.info.hrc20.length > 0">
         <v-flex xs3>
           <v-subheader>
-            HRC20
+            HRC20 Tokens
           </v-subheader>
         </v-flex>
         <v-flex xs7>
-          <v-card flat tile :color="'grey darken-'+(i%2+1)" style="border-bottom: 2px solid #000;padding: 15px 10px;" v-for="(token, i) in wallet.info.qrc20" :key="i">
+          <v-card flat tile :color="'white darken-'+(i%2+1)" style="border-bottom: 2px solid #000;padding: 15px 10px;" v-for="(token, i) in wallet.info.hrc20" :key="i">
             <v-layout>
               <v-flex xs5>{{ token.contract.name }}</v-flex>
               <v-flex xs7>{{ token.amount / Math.pow(10, token.contract.decimals) }} {{ token.contract.symbol }}</v-flex>
@@ -93,10 +101,14 @@ export default {
   },
   methods: {
     onCopySucc: function() {
-      this.$root.success('copy success')
+      this.$root.success('Copied to clipboard!')
     },
     onCopyError: function() {
-      this.$root.error('copy fail')
+      this.$root.error('Failed to copy!')
+    },
+    async refreshWallet(){
+      this.wallet.setInfo()
+      this.wallet.setHrc20()
     }
   }
 }
